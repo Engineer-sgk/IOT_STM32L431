@@ -49,6 +49,12 @@ iot_home_stml431\powerled.o: ../Inc/usart.h
 iot_home_stml431\powerled.o: ../Module/ESP8266.h
 iot_home_stml431\powerled.o: ../Module/SHT30.h
 iot_home_stml431\powerled.o: ../Bsp/I2C.h
+iot_home_stml431\powerled.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtthread.h
+iot_home_stml431\powerled.o: ../Inc/rtconfig.h
+iot_home_stml431\powerled.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtdebug.h
+iot_home_stml431\powerled.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtdef.h
+iot_home_stml431\powerled.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+iot_home_stml431\powerled.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtservice.h
 iot_home_stml431\powerled.o: ../Module/PowerLED.h
 iot_home_stml431\powerled.o: ../Module/Relay.h
 iot_home_stml431\powerled.o: ../Inc/gpio.h

@@ -26,6 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <rtthread.h>
 #include <string.h>
 #include "Timer6.h"
 #include "I2C.h"
@@ -67,6 +68,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 uint8_t dat_Rxd = 0x00;
 uint16_t ADC_Value[2] = {0x00};
+
 /* USER CODE END 0 */
 
 /**
@@ -113,32 +115,37 @@ int main(void)
   tFAN.Init();
 //  HAL_UART_Receive_DMA(&huart3, UART3.pucRec_Buffer, UART3_Rec_LENGTH);
   HAL_UART_Receive_IT(&huart1,  &dat_Rxd, 1);
-  ESP8266.Init();
+//  ESP8266.Init();
   __HAL_UART_ENABLE_IT(&huart3, UART_IT_IDLE);
+  
+  tBrightness.Init();
+  tMQ_2.Init();
+  SHT30.Init();
+  ESP8266.Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
     while(1)
     {
-        SHT30.Measure_Period_Mode();
-        printf("Wendu = %.1f℃\r\n", SHT30.fTemperature);
-        printf("shidu = %d%%RH\r\n\r\n", (uint16_t)SHT30.ucHumidity);
-        tBrightness.Detect();
-        tMQ_2.Detect();
-        ESP8266.SmartConifg();
-        if(ESP8266.TCP_Connect_Status == FALSE)
-        {
-            if(ESP8266.TCP_Reconnect_Timer >= TIMER6_10S)
-            {
-                ESP8266.TCP_Connect_Server();
-                ESP8266.TCP_Reconnect_Timer = 0;
-            }
-        }
+//        SHT30.Measure_Period_Mode();
+//        printf("Wendu = %.1f℃\r\n", SHT30.fTemperature);
+//        printf("shidu = %d%%RH\r\n\r\n", (uint16_t)SHT30.ucHumidity);
+//        tBrightness.Detect();
+//        tMQ_2.Detect();
+//        ESP8266.SmartConifg();
+//        if(ESP8266.TCP_Connect_Status == FALSE)
+//        {
+//            if(ESP8266.TCP_Reconnect_Timer >= TIMER6_10S)
+//            {
+//                ESP8266.TCP_Connect_Server();
+//                ESP8266.TCP_Reconnect_Timer = 0;
+//            }
+//        }
 //        printf("%d, %d.\r\n", ADC_Value[0], ADC_Value[1]);
-        ESP8266.Transfer_SHT30();
-
-        HAL_Delay(5000);
+//        ESP8266.Transfer_SHT30();
+        HAL_GPIO_TogglePin(LED_ALARM_GPIO_Port, LED_ALARM_Pin);
+        rt_thread_mdelay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -197,6 +204,38 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM16 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+	if(htim->Instance == htim6.Instance)
+	{
+		Timer6.SHT30_Measure_Timeout++;
+		Timer6.usDelay_Timer++;
+        ESP8266.TCP_Reconnect_Timer++;
+		//程序支持运行，指示灯间隔1s闪烁
+		if(++Timer6.usMCU_Run_Timer >= TIMER6_1S)
+		{
+			Timer6.usMCU_Run_Timer = 0;
+            HAL_GPIO_TogglePin(LED_RUN_GPIO_Port, LED_RUN_Pin);
+		}
+	}
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM16) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

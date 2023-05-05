@@ -5,6 +5,7 @@
 #include "main.h"
 #include "I2C.h"
 #include "Timer6.h"
+#include <rtthread.h>
 
 //宏定义
 #define SHT30_ADDR  (uint8_t)(0x44 << 1) //传感器地址
@@ -19,9 +20,10 @@
 
 typedef struct
 {
+    uint8_t ucHumidity;    //湿度 0%RH至100%RH  精度1%RH           
 	float   fTemperature;  //温度 -40至125℃    精度0.1℃ 
-	uint8_t ucHumidity;    //湿度 0%RH至100%RH  精度1%RH           
 	
+    void (*Init)(void);
 	void (*Measure_Period_Mode)(void);  //周期测量模式
 }SHT30_t;
 

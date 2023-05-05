@@ -48,6 +48,12 @@ iot_home_stml431\tim.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 iot_home_stml431\tim.o: ../Module/ESP8266.h
 iot_home_stml431\tim.o: ../Module/SHT30.h
 iot_home_stml431\tim.o: ../Bsp/I2C.h
+iot_home_stml431\tim.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtthread.h
+iot_home_stml431\tim.o: ../Inc/rtconfig.h
+iot_home_stml431\tim.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtdebug.h
+iot_home_stml431\tim.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtdef.h
+iot_home_stml431\tim.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+iot_home_stml431\tim.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtservice.h
 iot_home_stml431\tim.o: ../Module/PowerLED.h
 iot_home_stml431\tim.o: ../Inc/gpio.h
 iot_home_stml431\tim.o: ../Module/Brightness.h

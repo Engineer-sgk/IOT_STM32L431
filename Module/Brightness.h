@@ -3,10 +3,12 @@
 
 #include <stdio.h>
 #include "adc.h"
+#include <rtthread.h>
 
 typedef struct
 {
     uint8_t eResult;
+    void (*Init)(void);
     void (*Detect)(void);
 }Brightness_T;
 

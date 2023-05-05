@@ -7,8 +7,14 @@
 #define SERIAL_NUM (uint8_t *)"97783ANHE3SEK8U5\r\n"
 //#define TCP_Server  (uint8_t*)"AT+CIPSTART=\"TCP\",\"192.168.1.132\",8888\r\n"  //手机端模拟的TCP服务器
 
-/* Private variables----------------------------------------------------------*/
+#define ESP8266_PRIORITY 13u
+#define ESP8266_TIMESLICE 100u
 
+/* Private variables----------------------------------------------------------*/
+//ALIGN(RT_ALIGN_SIZE)
+static char ESP8266_Stack[4096];
+static struct rt_thread ESP8266_Thread;
+    
 /* Private function prototypes------------------------------------------------*/
 static void Init(void);                            //ESP8266初始化
 static void SmartConifg(void);                     //WIFI模块配网
@@ -19,7 +25,7 @@ static void DMA_Receive_Set(void);                 //DMA重新设置
 static void Error(void);                           //错误信息
 
 static void SendAT(uint8_t*, uint8_t*);            //发送AT指令
-
+static void ESP8266_Thread_Entry(void * paramter);
 /* Public variables-----------------------------------------------------------*/
 ESP8266_t  ESP8266 =
 {
@@ -44,6 +50,8 @@ ESP8266_t  ESP8266 =
 */
 static void Init()
 {
+    rt_err_t err;
+    
     //复位模组
     HAL_GPIO_WritePin(WIFI_RST_GPIO_Port, WIFI_RST_Pin, GPIO_PIN_RESET);
     HAL_Delay(10);
@@ -77,6 +85,47 @@ static void Init()
         }
     }
     while(strstr((const char*)UART3.pucRec_Buffer, "OK") == NULL);
+    
+    err = rt_thread_init(&ESP8266_Thread,
+                         "WIFI_Thread",
+                         ESP8266_Thread_Entry,
+                         RT_NULL,
+                         &ESP8266_Stack[0],
+                         sizeof(ESP8266_Stack),
+                         ESP8266_PRIORITY,
+                         ESP8266_TIMESLICE
+    
+    );
+                         
+                         
+    if(err != RT_ERROR)
+    {
+        err = rt_thread_startup(&ESP8266_Thread);
+    }
+    
+    if(err == RT_ERROR)
+    {
+        rt_kprintf("WIFI Init fail.\r\n");
+    }
+}
+
+static void ESP8266_Thread_Entry(void * paramter)
+{
+    while(1)
+    {
+        ESP8266.SmartConifg();
+        if(ESP8266.TCP_Connect_Status == FALSE)
+        {
+            if(ESP8266.TCP_Reconnect_Timer >= TIMER6_10S)
+            {
+                ESP8266.TCP_Connect_Server();
+                ESP8266.TCP_Reconnect_Timer = 0;
+            }
+        }
+        
+        ESP8266.Transfer_SHT30();
+        rt_thread_mdelay(5000u);
+    }
 }
 
 /*

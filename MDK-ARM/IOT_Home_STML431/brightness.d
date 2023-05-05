@@ -39,3 +39,9 @@ iot_home_stml431\brightness.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal
 iot_home_stml431\brightness.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h
 iot_home_stml431\brightness.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
 iot_home_stml431\brightness.o: ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
+iot_home_stml431\brightness.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtthread.h
+iot_home_stml431\brightness.o: ../Inc/rtconfig.h
+iot_home_stml431\brightness.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtdebug.h
+iot_home_stml431\brightness.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtdef.h
+iot_home_stml431\brightness.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+iot_home_stml431\brightness.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtservice.h

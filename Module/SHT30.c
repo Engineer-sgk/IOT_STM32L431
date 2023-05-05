@@ -2,21 +2,61 @@
 #include "SHT30.h"
 
 /* Private define-------------------------------------------------------------*/
-
+#define SHT30_PRIORITY  14
+#define SHT30_TIMESLICE 25
 /* Private variables----------------------------------------------------------*/
+//ALIGN(RT_ALIGN_SIZE)
+static char SHT30_ThreadStack[2048];
+static struct rt_thread SHT30_Thread;
+
 void Measure_Period_Mode(void);  //周期测量模式
+static void SHT30_Init(void);
+static void SHT30_Thread_Entry(void *paramter);
 
 /* Public variables-----------------------------------------------------------*/
 SHT30_t SHT30 =
 {
-    0.0,
     0,
+    0.0,
+    SHT30_Init,
     Measure_Period_Mode
 };
 
 /* Private function prototypes------------------------------------------------*/
 static uint8_t CRC_8(uint8_t*, uint8_t);
 
+static void SHT30_Init(void)
+{
+    rt_err_t err;
+    
+    rt_thread_init(&SHT30_Thread,
+                    "SHT30",
+                    SHT30_Thread_Entry,
+                    RT_NULL,
+                    &SHT30_ThreadStack[0],
+                    sizeof(SHT30_ThreadStack),
+                    SHT30_PRIORITY,
+                    SHT30_TIMESLICE);
+                    
+    if(err != RT_ERROR)
+    {
+        err = rt_thread_startup(&SHT30_Thread);
+    }
+    
+    if(err == RT_ERROR)
+        rt_kprintf("SHT30 init fail.\r\n");
+}
+
+static void SHT30_Thread_Entry(void *paramter)
+{
+    while(1)
+    {
+        Measure_Period_Mode();
+//        printf("Wendu = %.1f℃\r\n", SHT30.fTemperature);
+        rt_kprintf("shidu = %d%%RH\r\n\r\n", (uint16_t)SHT30.ucHumidity);
+        rt_thread_mdelay(1000);
+    }
+}
 
 /*
 	* @name   Measure_Period_Mode

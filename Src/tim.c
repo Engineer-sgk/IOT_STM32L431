@@ -276,6 +276,7 @@ void Delay_us(uint8_t us)
     TIM7->CR1 &= ~TIM_CR1_CEN;
 }
 
+/*
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim->Instance == htim6.Instance)
@@ -291,5 +292,5 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 	}
 }
-
+*/
 /* USER CODE END 1 */

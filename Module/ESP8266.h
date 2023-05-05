@@ -9,6 +9,7 @@
 #include "FAN.h"
 #include "Brightness.h"
 #include "MQ_2.h"
+#include <rtthread.h>
 
 //∫Í∂®“Â
 #define LED_WIFI_ON HAL_GPIO_WritePin(LED_WIFI_GPIO_Port, LED_WIFI_Pin, GPIO_PIN_RESET)

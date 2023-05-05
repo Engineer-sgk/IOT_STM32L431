@@ -2,6 +2,7 @@
 #define __FAN_H__
 
 #include "tim.h"
+#include <rtthread.h>
 
 typedef enum
 {

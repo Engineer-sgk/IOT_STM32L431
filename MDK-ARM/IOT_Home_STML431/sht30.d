@@ -53,6 +53,12 @@ iot_home_stml431\sht30.o: ../Module/PowerLED.h
 iot_home_stml431\sht30.o: ../Inc/gpio.h
 iot_home_stml431\sht30.o: ../Module/Brightness.h
 iot_home_stml431\sht30.o: ../Inc/adc.h
+iot_home_stml431\sht30.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtthread.h
+iot_home_stml431\sht30.o: ../Inc/rtconfig.h
+iot_home_stml431\sht30.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtdebug.h
+iot_home_stml431\sht30.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtdef.h
+iot_home_stml431\sht30.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+iot_home_stml431\sht30.o: ../Middlewares/Third_Party/RealThread_RTOS/include/rtservice.h
 iot_home_stml431\sht30.o: ../Module/Relay.h
 iot_home_stml431\sht30.o: ../Module/FAN.h
 iot_home_stml431\sht30.o: ../Module/MQ_2.h
